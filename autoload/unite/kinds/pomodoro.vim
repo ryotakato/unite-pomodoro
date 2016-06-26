@@ -32,16 +32,12 @@ endfunction
 
 let s:kind.action_table.edit = { 'description' : 'edit pomodoro'  }
 function! s:kind.action_table.edit.func(candidate)
-  if unite#util#input_yesno("Edit Selected Pomodoro ?")
-    call unite#pomodoro#edit(unite#pomodoro#struct(a:candidate.source__line))
-  endif
+  call unite#pomodoro#edit(unite#pomodoro#struct(a:candidate.source__line))
 endfunction
 
-let s:kind.action_table.finito = { 'description' : 'finito pomodoro'  }
+let s:kind.action_table.finito = { 'description' : 'finito pomodoro', 'is_quit': 0  }
 function! s:kind.action_table.finito.func(candidate)
-  if unite#util#input_yesno("Finito Selected Pomodoro ?")
-    call unite#pomodoro#finito(unite#pomodoro#struct(a:candidate.source__line))
-  endif
+  call unite#pomodoro#finito(unite#pomodoro#struct(a:candidate.source__line))
 endfunction
 
 "let s:parent_kind = {

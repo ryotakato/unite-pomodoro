@@ -100,7 +100,14 @@ function! unite#pomodoro#start(pomodoro)
     echo "Already Running pomodoro : ".s:run_pomodoro.title
   else
 
-    let minute = get(g:, 'unite_pomodoro_minute', 25)
+    let userConfig = get(g:, 'unite_pomodoro', {})
+    if !empty(userConfig)
+      if has_key(userConfig, 'minute')
+        let minute = userConfig.minute
+      else
+        let minute = 25
+      endif
+    endif
 
     if unite#util#input_yesno("Start pomodoro(".minute."min) '".a:pomodoro.title."' ?")
       let s:pomodoro_second = minute * 60
@@ -118,6 +125,14 @@ endfunction
 let s:count = 0
 function! unite#pomodoro#countdown(timer)
     let s:count += 1
+
+    let userConfig = get(g:, 'unite_pomodoro', {})
+    if !empty(userConfig)
+      if has_key(userConfig, 'update_func')
+        call userConfig.update_func()
+      endif
+    endif
+
     if s:count == s:pomodoro_second
         let s:count = 0
 
@@ -134,9 +149,17 @@ endfunction
 
 
 function! unite#pomodoro#show()
+  echo unite#pomodoro#get_running_count()
+endfunction
+
+function! unite#pomodoro#get_running_count()
+  if !empty(s:run_pomodoro)
     let min = s:count / 60
     let sec = s:count % 60
-    echo printf("pomodoro %02d:%02d", min, sec)
+    return printf("pomodoro %02d:%02d", min, sec)
+  else
+    return ""
+  endif
 endfunction
 
 function! unite#pomodoro#get_running_pomodoro()

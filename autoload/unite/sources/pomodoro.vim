@@ -85,6 +85,22 @@ function! s:source_new.hooks.on_init(args, context) abort "{{{
 
 endfunction "}}}
 
+function! s:source_new.hooks.on_syntax(args, context)
+  
+  syntax match uniteSource__Pomodoro_Status /\[.\]/
+        \ contained containedin=uniteSource__Pomodoro
+  highlight default link uniteSource__Pomodoro_Status Statement
+
+  syntax match uniteSource__Pomodoro_Title /\s\+[0-9]*\s\/\s\+[0-9]*/
+        \ contained containedin=uniteSource__Pomodoro
+  highlight default link uniteSource__Pomodoro_Title Function
+
+  syntax match uniteSource__Pomodoro_Running /\sRunning!!!!\s/
+        \ contained containedin=uniteSource__Pomodoro
+  highlight default link uniteSource__Pomodoro_Running PreProc
+
+endfunction
+
 function! s:source_new.gather_candidates(args, context)
   return s:source.gather_candidates(a:args, a:context)
 endfunction
